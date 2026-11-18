@@ -9,7 +9,7 @@ import os
 import logging
 from unittest import TestCase
 from tests.factories import AccountFactory
-from service.common import status  # HTTP Status Codes
+from service.common import status, error_handlers  # HTTP Status Codes
 from service.models import db, Account, init_db
 from service.routes import app
 from service import talisman
@@ -167,6 +167,16 @@ class TestAccountService(TestCase):
         resp = self.client.put(f"{BASE_URL}/0", json=test_account.serialize())
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_update_account_wrong_media_type(self):
+        """It should not Update an Account when sending the wrong media type"""
+        account = self._create_accounts(1)[0]
+        resp = self.client.put(
+            f"{BASE_URL}/{account.id}",
+            json=account.serialize(),
+            content_type="text/html"
+        )
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
     def test_delete_account(self):
         """It should Delete an Account"""
         account = self._create_accounts(1)[0]
@@ -209,3 +219,10 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Check for the CORS header
         self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
+
+    def test_internal_server_error(self):
+        """It should return a 500 error as JSON"""
+        with app.app_context():
+            resp, code = error_handlers.internal_server_error("boom")
+        self.assertEqual(code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(resp.get_json()["error"], "Internal Server Error")
