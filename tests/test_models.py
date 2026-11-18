@@ -65,6 +65,12 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(account.phone_number, fake_account.phone_number)
         self.assertEqual(account.date_joined, fake_account.date_joined)
 
+    def test_repr(self):
+        """It should show the Account name and id in repr"""
+        account = AccountFactory(name="Jane Doe")
+        account.id = 7
+        self.assertEqual(repr(account), "<Account Jane Doe id=[7]>")
+
     def test_add_a_account(self):
         """It should Create an account and add it to the database"""
         accounts = Account.all()
