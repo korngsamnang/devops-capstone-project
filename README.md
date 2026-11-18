@@ -1,5 +1,7 @@
 # devops-capstone-project
 
+![Build Status](https://github.com/korngsamnang/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)
+
 **devops-capstone-project** is my DevOps Capstone Project for the IBM DevOps and Software Engineering Professional Certificate. It is a customer accounts microservice for an e-commerce website, built with Python Flask, that exposes a REST API to create, read, update, delete, and list customer accounts. The project is planned with Agile (Zenhub), tested with TDD, containerized with Docker, and deployed to Kubernetes/OpenShift through a CI/CD pipeline.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
